@@ -4,7 +4,7 @@
 */
 
 function reverseString(str) {
-  // Tu solución acá  
+  return str.split('').reverse().join('');
 }
 
 /*
@@ -13,7 +13,7 @@ function reverseString(str) {
   y devuelva true si la cadena es un palíndromo, y false en caso contrario.
 */
 function isPalindrome(str) {
-  // Tu solución acá
+  return str === str.split('').reverse().join('');
 }
 
 /*
@@ -30,7 +30,22 @@ function isPalindrome(str) {
 */
 
 function closestPair(arr) {
-  // Tu solución acá
+  if (arr.length < 2) {
+    throw new Error('Array must contain at least two elements');
+  }
+  const sortedArr = [...arr].sort((a, b) => a - b);
+  let minDiff = Infinity;
+  let result = [];
+
+  for (let i = 0; i < sortedArr.length - 1; i++) {
+    const diff = Math.abs(sortedArr[i] - sortedArr[i + 1]);
+    if (diff < minDiff) {
+      minDiff = diff;
+      result = [sortedArr[i], sortedArr[i + 1]];
+    }
+  }
+
+  return result;
 }
 
 
@@ -67,7 +82,44 @@ function closestPair(arr) {
 */
 
 class Calculator {
-  // Tu solución acá
+  constructor() {
+    this.lastResult = 0;
+  }
+
+  add(a, b) {
+    this.lastResult = a + b;
+    return this.lastResult;
+  }
+
+  subtract(a, b) {
+    this.lastResult = a - b;
+    return this.lastResult;
+  }
+
+  multiply(a, b) {
+    this.lastResult = a * b;
+    return this.lastResult;
+  }
+
+  divide(a, b) {
+    if (b === 0) {
+      throw new Error('Division by zero is not allowed');
+    }
+    this.lastResult = a / b;
+    return this.lastResult;
+  }
+
+  exponentiate(base, exponent) {
+    if (exponent < 0) {
+      throw new Error('Exponentiation with negative exponent is not allowed');
+    }
+    this.lastResult = Math.pow(base, exponent);
+    return this.lastResult;
+  }
+
+  getLastResult() {
+    return this.lastResult;
+  }
 }
 
 module.exports = {
