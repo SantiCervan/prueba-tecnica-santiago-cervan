@@ -1,70 +1,171 @@
-# Getting Started with Create React App
+# Prueba Técnica Flexxus - CRUD de Usuarios
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## 📋 Descripción
 
-## Available Scripts
+Este proyecto es la resolución del desafío técnico propuesto por **Flexxus**. Consiste en un CRUD completo de usuarios implementado con **React**, siguiendo fielmente el diseño proporcionado en **Figma**.
 
-In the project directory, you can run:
+La aplicación permite gestionar usuarios a través de operaciones de creación, lectura, actualización y eliminación.
 
-### `npm start`
+---
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## ✨ Características principales
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- ✅ Listado de usuarios con paginación
+- ✅ Creación de nuevos usuarios
+- ✅ Edición de usuarios existentes
+- ✅ Eliminación de usuarios con confirmación
+- ✅ Búsqueda por nombre o apellido
+- ✅ Filtrado por estado (activo/inactivo)
+- ✅ Validación de formularios
+- ✅ Gestión de estado global con Redux
+- ✅ Loaders para indicar operaciones en curso
+- ✅ Diseño fiel al de Figma
 
-### `npm test`
+---
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## 🛠️ Tecnologías utilizadas
 
-### `npm run build`
+- **React**: Biblioteca principal para la construcción de la interfaz
+- **Redux Toolkit**: Para la gestión del estado global
+- **Ant Design**: Biblioteca de componentes UI
+- **CSS**: Para personalizar los componentes y ajustarlos al diseño de Figma
+- **json-server**: Para simular un backend y realizar operaciones CRUD
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+---
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## 🚀 Estructura del proyecto
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+El proyecto fue inicializado con **Create React App** y organizado con la siguiente estructura de carpetas:
 
-### `npm run eject`
+client/
+├── public/
+│ └── logo-flexxus.png
+├── src/
+│ ├── components/
+│ │ ├── DeleteUserModal.jsx
+│ │ ├── UserList.jsx
+│ │ ├── UserListColumns.js
+│ │ ├── UserListControls.jsx
+│ │ └── UserModal.jsx
+│ ├── hooks/
+│ │ └── useUserActions.js
+│ ├── redux/
+│ │ ├── slices/
+│ │ │ └── userSlice.js
+│ │ └── store.js
+│ ├── services/
+│ │ └── userService.js
+│ ├── styles/
+│ │ ├── UserList.css
+│ │ ├── UserListControls.css
+│ │ └── UserModal.css
+│ ├── App.css
+│ ├── App.js
+│ ├── index.css
+│ └── index.js
+└── package.json
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+---
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## 💡 Implementación y decisiones técnicas
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+### Gestión del estado con Redux
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+Implementé **Redux Toolkit** para manejar el estado global de la aplicación, lo que permite:
 
-## Learn More
+- Centralizar la lógica de negocio
+- Separar las responsabilidades entre componentes
+- Facilitar el manejo de operaciones asíncronas
+- Mejorar la escalabilidad del proyecto
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### Componentes modulares
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+Diseñé la aplicación con componentes modulares y reutilizables:
 
-### Code Splitting
+- **UserList**: Componente principal que orquesta la visualización y gestión de usuarios
+- **UserListControls**: Maneja los controles de búsqueda y filtrado
+- **UserModal**: Componente reutilizable para la creación y edición de usuarios
+- **DeleteUserModal**: Modal de confirmación para la eliminación de usuarios
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+### Custom Hooks
 
-### Analyzing the Bundle Size
+Extraje la lógica de negocio a un custom hook para mantener los componentes limpios y enfocados en la presentación:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+- **useUserActions**: Centraliza todas las acciones relacionadas con los usuarios
 
-### Making a Progressive Web App
+### Validación de formularios
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+Implementé validación completa en los formularios utilizando las capacidades de **Ant Design Form**:
 
-### Advanced Configuration
+- Validación de campos requeridos
+- Validación de formato de email
+- Restricciones en campos numéricos (edad)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+### Experiencia de usuario
 
-### Deployment
+Mejoré la experiencia de usuario con:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+- Loaders durante operaciones asíncronas
+- Mensajes de éxito/error tras las operaciones
+- Confirmación antes de acciones destructivas
+- Paginación para manejar grandes volúmenes de datos
 
-### `npm run build` fails to minify
+### Diseño fiel a Figma
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Utilicé **CSS** para personalizar los componentes de **Ant Design** y ajustarlos exactamente al diseño proporcionado en **Figma**:
+
+- Espaciado y márgenes precisos
+- Colores consistentes
+- Estilos de botones y controles según el diseño
+
+---
+
+## 🏃‍♂️ Cómo ejecutar el proyecto
+
+1. Clonar el repositorio
+2. Instalar dependencias del cliente:
+
+```bash
+cd client
+npm install
+```
+
+3. Instalar dependencias del servidor:
+
+```bash
+cd api
+npm install
+```
+
+4. Iniciar el servidor:
+
+```bash
+cd api
+npm run server
+```
+
+5. Iniciar el cliente:
+
+```bash
+cd client
+npm start
+```
+
+## 📝 Conclusiones
+
+Este proyecto demuestra mi capacidad para desarrollar aplicaciones web completas siguiendo requisitos específicos y diseños proporcionados. La implementación incluye buenas prácticas de desarrollo como:
+
+- Arquitectura modular y escalable
+- Separación de responsabilidades
+- Gestión eficiente del estado
+- Experiencia de usuario optimizada
+- Código limpio y mantenible
+- La aplicación cumple con todos los requisitos especificados en el desafío técnico, proporcionando una solución - robusta y elegante para la gestión de usuarios.
+
+## 📚 Recursos utilizados
+
+Documentación de React
+Documentación de Redux Toolkit
+Documentación de Ant Design
+Documentación de json-server
+Diseño de Figma proporcionado por Flexxus
