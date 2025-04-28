@@ -1,0 +1,7 @@
+.delete-modal-container {
+  padding: 0.5rem 0rem;
+}
+
+.ant-modal-footer {
+  margin-bottom: -8px;
+}

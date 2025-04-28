@@ -1,0 +1,21 @@
+.header {
+  background-color: #d9d9d9;
+  display: flex;
+  align-items: flex-start;
+  padding: 1rem 5rem;
+}
+
+.user-list-controls-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1.38rem;
+  margin-bottom: 1.38rem;
+  gap: 1rem;
+}
+
+.filters-container {
+  display: flex;
+  gap: 12px;
+}

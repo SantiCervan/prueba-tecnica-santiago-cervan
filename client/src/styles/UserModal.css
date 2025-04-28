@@ -1,0 +1,6 @@
+.action-button {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: -10px;
+  margin-bottom: -8px;
+}

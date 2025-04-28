@@ -1,0 +1,37 @@
+.list-user-container {
+  padding: 2rem 8rem;
+  background-color: #f5f5f5;
+}
+
+.ant-table-content {
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.253);
+  border-radius: 1rem;
+}
+
+th {
+  background-color: #f3f3f3 !important;
+}
+
+th::before {
+  background-color: #e4e4e4 !important;
+}
+
+.ant-pagination-item-link {
+  background-color: white !important;
+  border-radius: 2px !important;
+}
+
+.ant-pagination-item {
+  border-radius: 2px !important;
+}
+
+.ant-pagination-options {
+  display: none !important;
+}
+
+.loader {
+  height: 80vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
