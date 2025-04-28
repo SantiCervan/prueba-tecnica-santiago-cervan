@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Table, Spin, Space, Alert, Empty, Tag, Button, message } from "antd";
-import { getUsers, createUser } from "../services/userService";
+import { getUsers, createUser, updateUser } from "../services/userService";
 import UserListControls from "./UserListControls";
 import UserModal from "./UserModal";
 import '../styles/UserList.css'
@@ -16,13 +16,13 @@ const UserList = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [formLoading, setFormLoading] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
+  const [isEditing, setIsEditing] = useState(false);
 
   const fetchUsers = async () => {
     try {
       setLoading(true);
       setError(null);
       const data = await getUsers();
-
       if (Array.isArray(data)) {
         setUsers(data);
         setFilteredUsers(data);
@@ -72,19 +72,35 @@ const UserList = () => {
 
   const handleAddUser = () => {
     setCurrentUser(null);
+    setIsEditing(false);
+    setIsModalVisible(true);
+  };
+
+  const handleEditUser = (user) => {
+    setCurrentUser(user);
+    setIsEditing(true);
     setIsModalVisible(true);
   };
 
   const handleFormSubmit = async (values) => {
     try {
       setFormLoading(true);
-      await createUser(values);
-      message.success('Usuario creado exitosamente');
+
+      if (isEditing) {
+        // Si estamos editando, actualizamos el usuario existente
+        await updateUser(currentUser.id, values);
+        message.success('Usuario actualizado exitosamente');
+      } else {
+        // Si estamos creando, creamos un nuevo usuario
+        await createUser(values);
+        message.success('Usuario creado exitosamente');
+      }
+
       setIsModalVisible(false);
-      fetchUsers();
+      fetchUsers(); // Recargar la lista de usuarios
     } catch (error) {
-      console.error('Error al crear usuario:', error);
-      message.error('Error al crear usuario');
+      console.error('Error al procesar usuario:', error);
+      message.error(`Error al ${isEditing ? 'actualizar' : 'crear'} usuario`);
     } finally {
       setFormLoading(false);
     }
@@ -139,9 +155,13 @@ const UserList = () => {
       title: "Acciones",
       key: "acciones",
       width: 150,
-      render: () => (
+      render: (_, record) => (
         <Space>
-          <Button type="link" size="small">
+          <Button
+            type="link"
+            size="small"
+            onClick={() => handleEditUser(record)}
+          >
             Editar
           </Button>
           <Button type="link" size="small">
@@ -210,7 +230,7 @@ const UserList = () => {
         onCancel={handleCancel}
         onFinish={handleFormSubmit}
         initialValues={currentUser}
-        action={currentUser ? "Editar usuario" : "Agregar usuario"}
+        action={isEditing ? "Editar usuario" : "Agregar usuario"}
         loading={formLoading}
       />
     </div>

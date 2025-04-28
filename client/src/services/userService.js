@@ -30,15 +30,26 @@ export const createUser = async (user) => {
   return await res.json();
 };
 
-export const updateUser = async (user) => {
+export const updateUser = async (id, userData) => {
   await delay(1000);
-  const res = await fetch(`${API_URL}/${user.id}`, {
-    method: "PUT",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(user),
-  });
-  if (!res.ok) throw new Error("Error al actualizar usuario");
-  return await res.json();
+  try {
+    const response = await fetch(`${API_URL}/${id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(userData),
+    });
+
+    if (!response.ok) {
+      throw new Error(`Error al actualizar usuario: ${response.status} ${response.statusText}`);
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error('Error en updateUser:', error);
+    throw error;
+  }
 };
 
 export const deleteUser = async (id) => {
