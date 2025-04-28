@@ -6,11 +6,9 @@ export const getUsers = async () => {
   await delay(1000);
   try {
     const response = await fetch(`${API_URL}?_sort=id&_order=desc`);
-
     if (!response.ok) {
       throw new Error(`Error al obtener usuarios: ${response.status} ${response.statusText}`);
     }
-
     const data = await response.json();
     return data;
   } catch (error) {
@@ -40,11 +38,9 @@ export const updateUser = async (id, userData) => {
       },
       body: JSON.stringify(userData),
     });
-
     if (!response.ok) {
       throw new Error(`Error al actualizar usuario: ${response.status} ${response.statusText}`);
     }
-
     return await response.json();
   } catch (error) {
     console.error('Error en updateUser:', error);
@@ -54,9 +50,16 @@ export const updateUser = async (id, userData) => {
 
 export const deleteUser = async (id) => {
   await delay(1000);
-  const res = await fetch(`${API_URL}/${id}`, {
-    method: "DELETE",
-  });
-  if (!res.ok) throw new Error("Error al eliminar usuario");
-  return true;
+  try {
+    const response = await fetch(`${API_URL}/${id}`, {
+      method: 'DELETE',
+    });
+    if (!response.ok) {
+      throw new Error(`Error al eliminar usuario: ${response.status} ${response.statusText}`);
+    }
+    return true;
+  } catch (error) {
+    console.error('Error en deleteUser:', error);
+    throw error;
+  }
 };

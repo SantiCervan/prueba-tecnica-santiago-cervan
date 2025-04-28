@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { Table, Spin, Space, Alert, Empty, Tag, Button, message } from "antd";
-import { getUsers, createUser, updateUser } from "../services/userService";
+import { getUsers, createUser, updateUser, deleteUser } from "../services/userService";
 import UserListControls from "./UserListControls";
 import UserModal from "./UserModal";
 import '../styles/UserList.css'
+import DeleteUserModal from './DeleteUserModal';
 
 const UserList = () => {
   const [users, setUsers] = useState([]);
@@ -17,6 +18,9 @@ const UserList = () => {
   const [formLoading, setFormLoading] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
+  const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
+  const [userToDelete, setUserToDelete] = useState(null);
+  const [deleteLoading, setDeleteLoading] = useState(false);
 
   const fetchUsers = async () => {
     try {
@@ -73,7 +77,9 @@ const UserList = () => {
   const handleAddUser = () => {
     setCurrentUser(null);
     setIsEditing(false);
-    setIsModalVisible(true);
+    setTimeout(() => {
+      setIsModalVisible(true);
+    }, 0);
   };
 
   const handleEditUser = (user) => {
@@ -82,22 +88,48 @@ const UserList = () => {
     setIsModalVisible(true);
   };
 
+  const handleShowDeleteModal = (user) => {
+    setUserToDelete(user);
+    setIsDeleteModalVisible(true);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!userToDelete) return;
+    try {
+      setDeleteLoading(true);
+      await deleteUser(userToDelete.id);
+      message.success('Usuario eliminado exitosamente');
+      setIsDeleteModalVisible(false);
+      setUserToDelete(null);
+      fetchUsers();
+    } catch (error) {
+      console.error('Error al eliminar usuario:', error);
+      message.error('Error al eliminar usuario');
+    } finally {
+      setDeleteLoading(false);
+    }
+  };
+
+  const handleCancelDelete = () => {
+    setIsModalVisible(false);
+    setCurrentUser(null);
+    setIsEditing(false);
+  };
+
   const handleFormSubmit = async (values) => {
     try {
       setFormLoading(true);
 
       if (isEditing) {
-        // Si estamos editando, actualizamos el usuario existente
         await updateUser(currentUser.id, values);
         message.success('Usuario actualizado exitosamente');
       } else {
-        // Si estamos creando, creamos un nuevo usuario
         await createUser(values);
         message.success('Usuario creado exitosamente');
       }
 
       setIsModalVisible(false);
-      fetchUsers(); // Recargar la lista de usuarios
+      fetchUsers();
     } catch (error) {
       console.error('Error al procesar usuario:', error);
       message.error(`Error al ${isEditing ? 'actualizar' : 'crear'} usuario`);
@@ -108,6 +140,10 @@ const UserList = () => {
 
   const handleCancel = () => {
     setIsModalVisible(false);
+    if (!formLoading) {
+      setCurrentUser(null);
+      setIsEditing(false);
+    }
   };
 
   useEffect(() => {
@@ -164,7 +200,11 @@ const UserList = () => {
           >
             Editar
           </Button>
-          <Button type="link" size="small">
+          <Button
+            type="link"
+            size="small"
+            onClick={() => handleShowDeleteModal(record)}
+          >
             Eliminar
           </Button>
         </Space>
@@ -172,13 +212,6 @@ const UserList = () => {
     },
   ];
 
-  if (loading) {
-    return (
-      <div>
-        <Spin size="large" tip="Cargando usuarios..." />
-      </div>
-    );
-  }
 
   if (error) {
     return (
@@ -208,23 +241,18 @@ const UserList = () => {
         onStatusFilterChange={handleStatusFilterChange}
         onAddUser={handleAddUser}
       />
-      {filteredUsers.length > 0 ? (
-        <Table
-          rowKey="id"
-          loading={loading}
-          dataSource={filteredUsers}
-          columns={columns}
-          pagination={{ pageSize: 9 }}
-        />
-      ) : (
-        <Empty
-          description={
-            (searchText || statusFilter)
-              ? "No se encontraron resultados con los filtros aplicados"
-              : "No hay usuarios disponibles"
-          }
-        />
-      )}
+      <Table
+        rowKey="id"
+        loading={loading}
+        dataSource={filteredUsers}
+        columns={columns}
+        pagination={{ pageSize: 9 }}
+        locale={{
+          emptyText: (searchText || statusFilter)
+            ? "No se encontraron resultados con los filtros aplicados"
+            : "No hay usuarios disponibles"
+        }}
+      />
       <UserModal
         visible={isModalVisible}
         onCancel={handleCancel}
@@ -232,6 +260,13 @@ const UserList = () => {
         initialValues={currentUser}
         action={isEditing ? "Editar usuario" : "Agregar usuario"}
         loading={formLoading}
+      />
+      <DeleteUserModal
+        visible={isDeleteModalVisible}
+        onCancel={handleCancelDelete}
+        onConfirm={handleConfirmDelete}
+        user={userToDelete}
+        loading={deleteLoading}
       />
     </div>
   );

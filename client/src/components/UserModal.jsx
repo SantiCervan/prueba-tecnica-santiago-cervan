@@ -16,7 +16,11 @@ const UserModal = ({
 
   useEffect(() => {
     if (visible) {
-      form.setFieldsValue(initialValues);
+      if (initialValues) {
+        form.setFieldsValue(initialValues);
+      } else {
+        form.resetFields();
+      }
     }
   }, [visible, initialValues, form]);
 
@@ -44,7 +48,7 @@ const UserModal = ({
       <Form
         form={form}
         layout="vertical"
-        initialValues={initialValues}
+        initialValues={{}}
         onFinish={handleSubmit}
         requiredMark={false}
       >

@@ -28,3 +28,10 @@ th::before {
 .ant-pagination-options {
   display: none !important;
 }
+
+.loader {
+  height: 80vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
