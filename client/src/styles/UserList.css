@@ -24,3 +24,7 @@ th::before {
 .ant-pagination-item {
   border-radius: 2px !important;
 }
+
+.ant-pagination-options {
+  display: none !important;
+}

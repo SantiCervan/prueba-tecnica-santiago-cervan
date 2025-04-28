@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
-import { Table, Spin, Space, Alert, Empty, Tag, Breadcrumb, Button } from "antd";
-import { getUsers } from "../services/userService";
+import { Table, Spin, Space, Alert, Empty, Tag, Button, message } from "antd";
+import { getUsers, createUser } from "../services/userService";
 import UserListControls from "./UserListControls";
+import UserModal from "./UserModal";
 import '../styles/UserList.css'
 
 const UserList = () => {
@@ -12,6 +13,9 @@ const UserList = () => {
   const [searchValue, setSearchValue] = useState('');
   const [statusFilter, setStatusFilter] = useState(undefined);
   const [filteredUsers, setFilteredUsers] = useState([]);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [formLoading, setFormLoading] = useState(false);
+  const [currentUser, setCurrentUser] = useState(null);
 
   const fetchUsers = async () => {
     try {
@@ -42,8 +46,8 @@ const UserList = () => {
 
     if (searchText) {
       result = result.filter(user =>
-        (user.name ?? user.name.toLowerCase().includes(searchText.toLowerCase())) ||
-        (user.lastname ?? user.lastname.toLowerCase().includes(searchText.toLowerCase()))
+        (user.name && user.name.toLowerCase().includes(searchText.toLowerCase())) ||
+        (user.lastname && user.lastname.toLowerCase().includes(searchText.toLowerCase()))
       );
     }
 
@@ -67,7 +71,27 @@ const UserList = () => {
   };
 
   const handleAddUser = () => {
-    console.log("Agregar usuario");
+    setCurrentUser(null);
+    setIsModalVisible(true);
+  };
+
+  const handleFormSubmit = async (values) => {
+    try {
+      setFormLoading(true);
+      await createUser(values);
+      message.success('Usuario creado exitosamente');
+      setIsModalVisible(false);
+      fetchUsers();
+    } catch (error) {
+      console.error('Error al crear usuario:', error);
+      message.error('Error al crear usuario');
+    } finally {
+      setFormLoading(false);
+    }
+  };
+
+  const handleCancel = () => {
+    setIsModalVisible(false);
   };
 
   useEffect(() => {
@@ -181,6 +205,14 @@ const UserList = () => {
           }
         />
       )}
+      <UserModal
+        visible={isModalVisible}
+        onCancel={handleCancel}
+        onFinish={handleFormSubmit}
+        initialValues={currentUser}
+        action={currentUser ? "Editar usuario" : "Agregar usuario"}
+        loading={formLoading}
+      />
     </div>
   );
 };

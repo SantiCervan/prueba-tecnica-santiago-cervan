@@ -5,7 +5,7 @@ const delay = (ms) => new Promise((res) => setTimeout(res, ms));
 export const getUsers = async () => {
   await delay(1000);
   try {
-    const response = await fetch(API_URL);
+    const response = await fetch(`${API_URL}?_sort=id&_order=desc`);
 
     if (!response.ok) {
       throw new Error(`Error al obtener usuarios: ${response.status} ${response.statusText}`);
