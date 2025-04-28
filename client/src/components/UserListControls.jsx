@@ -1,6 +1,6 @@
 import React from "react";
 import { Breadcrumb, Button, Input, Select } from "antd";
-import '../styles/UserListControls.css'
+import '../styles/UserListControls.css';
 
 const { Search } = Input;
 const { Option } = Select;

@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { Modal, Form, Input, Select, InputNumber, Button, Divider, Row, Col } from "antd";
-import '../styles/UserModal.css'
+import '../styles/UserModal.css';
 
 const { Option } = Select;
 
@@ -16,11 +16,9 @@ const UserModal = ({
 
   useEffect(() => {
     if (visible) {
-      if (initialValues) {
-        form.setFieldsValue(initialValues);
-      } else {
-        form.resetFields();
-      }
+      form.setFieldsValue(initialValues || {});
+    } else {
+      form.resetFields();
     }
   }, [visible, initialValues, form]);
 
