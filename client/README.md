@@ -109,6 +109,7 @@ Mejoré la experiencia de usuario con:
 - Mensajes de éxito/error tras las operaciones
 - Confirmación antes de acciones destructivas
 - Paginación para manejar grandes volúmenes de datos
+- Nuevos usuarios al inicio de la lista, para no tener que buscarlos al final
 
 ### Diseño fiel a Figma
 
